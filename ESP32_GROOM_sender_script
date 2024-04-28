@@ -1,0 +1,25 @@
+#include <Arduino.h>
+#include <RCSwitch.h>
+
+RCSwitch mySwitch = RCSwitch();
+unsigned short int counter_loops = 65500;
+
+void setup() {
+  Serial.begin(115200); // Initialize serial communication at 115200 baud
+  mySwitch.enableTransmit(4);  // GPIO 5 used for transmitting signal
+
+  // Optional: set protocol, pulse length.
+  mySwitch.setProtocol(1); // Setting a protocol is optional, default is 1
+  mySwitch.setPulseLength(320); // Set pulse length in microseconds (optional)
+}
+
+void loop() {
+  mySwitch.send(counter_loops, sizeof(unsigned short int) * 8); // Send an integer value (12345) with a bit length (24 bits)
+  Serial.print("Data Sent: ");
+  Serial.println(int(counter_loops));
+  if (counter_loops == 0xFFFF) {
+    counter_loops = 0;
+  }
+  counter_loops++;
+//  delay(2000); // Wait for 2 seconds before sending again
+}
