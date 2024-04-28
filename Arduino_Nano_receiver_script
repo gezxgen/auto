@@ -1,1 +1,26 @@
+#include <RCSwitch.h>
+
+RCSwitch mySwitch = RCSwitch();
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("-----Start-----");
+  mySwitch.enableReceive(0);  // Receiver on interrupt 1 => that is pin #3
+}
+
+void loop() {
+  if (mySwitch.available()) {
+    Serial.println("available");
+    unsigned short int value = mySwitch.getReceivedValue();
+
+    if (value == 0) {
+      Serial.println("Unknown encoding");
+    } else {
+      Serial.print("Received ");
+      Serial.println(value);
+    }
+
+    mySwitch.resetAvailable();
+  }
+}
 
